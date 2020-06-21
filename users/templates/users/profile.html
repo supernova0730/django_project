@@ -1,0 +1,39 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="content-section">
+        <div class="media">
+            <img class="rounded-circle account-img" src="{{ user.profile.image.url }}" alt="{{ user.profile.image }}">
+            <div class="media-body">
+                <h2 class="account-heading">{{ user.username }}</h2>
+                <p class="text-secondary">{{ user.email }}</p>
+            </div>
+        </div>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Profile Info</legend>
+                {{ u_form|crispy }}   
+                {{ p_form|crispy }}   
+            </fieldset>
+            <div class="form-group">
+                <button type="submit" class="btn btn-outline-info">Update</button>
+            </div>
+        </form>
+    </div>
+
+        {% for post in user.post_set.all %}
+            <article class="media content-section">
+                <img src="{{ post.author.profile.image.url }}" class="rounded-circle article-img">
+                <div class="media-body">
+                <div class="article-metadata">
+                    <a class="mr-2" href="#">{{ post.author }}</a>
+                    <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+                </div>
+                <h2><a class="article-title" href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+                <p class="article-content">{{ post.content }}</p>
+                </div>
+            </article>
+        {% endfor %}
+{% endblock %}
